@@ -127,6 +127,6 @@ When running the `eks_cert_fingerprint_indexer` program as a lambda a new IAM ro
 }
 ```
 
-## Questions / Support
+## Questions
 
-If you have questions or need assitance deploying this code you can message me via email or twitter (contact info in github profile).
+If you have questions you can message me via email or twitter (contact info in github profile).
