@@ -58,3 +58,17 @@ The `eks_cert_fingerprint_indexer` program performs the following actions when e
   - Establish TLS connection to each OIDC issuer URL to read certificates.
   - Generate SHA1 "fingerprint" of the configured certificate index (default is last certificate defined) within the certificate chain.
   - Create a SSM parameter using the configured key prefix suffixed by `/<EKS cluster name>`.
+
+---
+
+## Building an executable
+
+The `eks_cert_fingerprint_indexer` program is written in [go](https://go.dev/) which will need to be installed in the build env. There are two ways to run the `eks_cert_fingerprint_indexer` program:
+  - As a [standalone program](https://github.com/dallasmarlow/eks_cert_fingerprint_indexer/blob/main/cmd/main.go) configured via CLI flags: `env GO111MODULE=on go build -o eks_cert_fingerprint_indexer cmd/*`.
+  - As an [AWS Lambda](https://aws.amazon.com/lambda/) [function](https://github.com/dallasmarlow/eks_cert_fingerprint_indexer/blob/main/lambda/main.go) configured via [environment_variables](https://en.wikipedia.org/wiki/Environment_variable): `env GO111MODULE=on go build -o eks_cert_fingerprint_indexer lambda/*`
+
+## Lambda environment_variables
+  - `CERT_INDEX` - Reverse numeric index of the certificate to fingerprint within chain, defaults to last cert defined within chain.
+  - `SSM_KEY_PFX` - SSM parameter name prefix, values must start with `/`. Default: `/eks_cluster_oidc_fingerprints/`
+  - `SSM_OVERWRITE` - Overwrite existing SSM parameters. Default: `false`
+  - `VERIFY_CERTS` - Verify TLS certificates. Default: `true`
