@@ -14,7 +14,7 @@ import (
 )
 
 var (
-	certificateIndexFlag = flag.Int("cert-reverse-index", indexer.DefaultCertificateIndex, " Reverse index of the certificate to fingerprint within chain, defaults to last cert defined.")
+	certificateIndexFlag = flag.Int("cert-reverse-index", indexer.DefaultCertificateIndex, "Reverse index of the certificate to fingerprint within chain, defaults to last cert defined.")
 	regionFlag           = flag.String("region", "us-west-2", "AWS region.")
 	ssmKeyPrefixFlag     = flag.String("ssm-key-prefix", indexer.DefaultSSMKeyPrefix, "SSM parameter key prefix.")
 	ssmOverwriteFlag     = flag.Bool("ssm-overwrite", indexer.DefaultSSMOverwrite, "Overwrite SSM parameters.")
