@@ -28,4 +28,4 @@ resource "aws_iam_openid_connect_provider" "eks_cluster" {
 
 The Terraform code above provides the same functionality as the utility program within this repo in a more direct manner, but this approach will only work if the Terraform process has direct access to AWS IP addresses used with the OIDC hosted services. 
 
-In the event that the Terraform process uses a forward proxy (e.g.: Squid) or other systems which limit internet egress access to specific DNS zones, the approach above will fail due to the Terraform TLS provider `tls_certificate` data source implementation which will attempt to open a TCP connection to the host IP address directly.
+In the event that the Terraform process uses a forward proxy (e.g.: Squid) or other systems which limit internet egress access to specific DNS zones, the approach above will fail due to the Terraform TLS provider [tls_certificate data source](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/data-sources/tls_certificate) implementation which will attempt to open a TCP connection to the host IP address directly.
