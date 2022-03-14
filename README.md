@@ -72,3 +72,61 @@ The `eks_cert_fingerprint_indexer` program is written in [go](https://go.dev/) w
   - `SSM_KEY_PFX` - SSM parameter name prefix, values must start with `/`. Default: `/eks_cluster_oidc_fingerprints/`
   - `SSM_OVERWRITE` - Overwrite existing SSM parameters. Default: `false`
   - `VERIFY_CERTS` - Verify TLS certificates. Default: `true`
+
+## AWS IAM requirements
+
+The following IAM policy can be used to grant an IAM entity (group, role, user) the required access for the `eks_cert_fingerprint_indexer` program to run. The `SsmReadWrite` IAM statement restricts SSM access to the default SSM key prefix path and will need to be changed if using a non-default SSM key prefix.
+
+```
+{
+    "Statement": [
+        {
+            "Action": [
+                "eks:ListClusters",
+                "eks:DescribeCluster"
+            ],
+            "Effect": "Allow",
+            "Resource": "*",
+            "Sid": "EksReadOnly"
+        },
+        {
+            "Action": [
+                "ssm:PutParameter",
+                "ssm:GetParameter"
+            ],
+            "Effect": "Allow",
+            "Resource": "arn:aws:ssm:<AWS region>:<AWS account>:parameter/eks_cluster_oidc_fingerprints/*",
+            "Sid": "SsmReadWrite"
+        }
+    ],
+    "Version": "2012-10-17"
+}
+```
+
+When running the `eks_cert_fingerprint_indexer` program as a lambda function additional access is required to submit CloudWatch logs and create ENIs within VPCs if configured to run within VPC subnets.
+
+AWS lambda managed policies (choose one of the following, not both):
+  - `arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole`
+  - `arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole`
+
+When running the `eks_cert_fingerprint_indexer` program as a lambda a new IAM role will need to be created with the policies above attached. The role will also need a trust policy attached to allow the lambda service to assume it:
+
+```
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "",
+            "Effect": "Allow",
+            "Principal": {
+                "Service": "lambda.amazonaws.com"
+            },
+            "Action": "sts:AssumeRole"
+        }
+    ]
+}
+```
+
+## Questions / Support
+
+If you have questions or need assitance deploying this code you can message me via email or twitter (contact info in github profile).
