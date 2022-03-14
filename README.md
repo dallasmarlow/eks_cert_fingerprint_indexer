@@ -63,7 +63,7 @@ The `eks_cert_fingerprint_indexer` program performs the following actions when e
 
 ## Building an executable
 
-The `eks_cert_fingerprint_indexer` program is written in [go](https://go.dev/) which will need to be installed in the build env. There are two ways to run the `eks_cert_fingerprint_indexer` program:
+The `eks_cert_fingerprint_indexer` program is written in [go](https://go.dev/) which will need to be installed in the build env. There are two ways to build the `eks_cert_fingerprint_indexer` program:
   - As a [standalone program](https://github.com/dallasmarlow/eks_cert_fingerprint_indexer/blob/main/cmd/main.go) configured via CLI flags: `env GO111MODULE=on go build -o eks_cert_fingerprint_indexer cmd/*`.
   - As an [AWS Lambda](https://aws.amazon.com/lambda/) [function](https://github.com/dallasmarlow/eks_cert_fingerprint_indexer/blob/main/lambda/main.go) configured via [environment_variables](https://en.wikipedia.org/wiki/Environment_variable): `env GO111MODULE=on go build -o eks_cert_fingerprint_indexer lambda/*`
 
