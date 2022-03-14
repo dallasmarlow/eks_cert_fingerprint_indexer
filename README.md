@@ -29,3 +29,32 @@ resource "aws_iam_openid_connect_provider" "eks_cluster" {
 The Terraform code above provides the same functionality as the utility program within this repo in a more direct manner, but this approach will only work if the Terraform process has direct access to AWS IP addresses used with the OIDC hosted services. 
 
 In the event that the Terraform process uses a forward proxy (e.g.: Squid) or other systems which limit internet egress access to specific DNS zones, the approach above will fail due to the Terraform TLS provider [tls_certificate data source](https://registry.terraform.io/providers/hashicorp/tls/latest/docs/data-sources/tls_certificate) implementation which will attempt to open a TCP connection to the host IP address directly.
+
+The `eks_cert_fingerprint_indexer` program is designed to provide an alternative solution for people who find themselves in the situation described above.
+
+## What is this thing?
+
+Simply put, the `eks_cert_fingerprint_indexer` program reads EKS OIDC issuer certificates, generates SHA1 fingerprints and stores them in AWS SSM parameters. This allows other provisioning systems (e.g.: [Terraform](https://www.terraform.io/), [CloudFormation](https://aws.amazon.com/cloudformation/)) to fetch the fingerprint values and use them when creating new AWS OIDC providers. Terraform example:
+
+```
+data "aws_ssm_parameter" "eks_cluster_oidc_fingerprint" {
+  name = "/eks_cluster_oidc_fingerprints/example"
+}
+
+resource "aws_iam_openid_connect_provider" "eks_cluster" {
+  client_id_list = [
+    "sts.amazonaws.com",
+  ]
+  thumbprint_list = [
+    data.aws_ssm_parameter.eks_cluster_oidc_fingerprint.value,
+  ]
+  url = aws_eks_cluster.example.identity[0].oidc[0].issuer
+}
+```
+
+The `eks_cert_fingerprint_indexer` program performs the following actions when executed:
+  - List EKS clusters within a configured AWS region.
+  - Describe each EKS cluster to fetch the OIDC issuer URL associated.
+  - Establish TLS connection to each OIDC issuer URL to read certificates.
+  - Generate SHA1 "fingerprint" of the configured certificate index (default is last certificate defined) within the certificate chain.
+  - Create SSM parameter using the configured key prefix suffixed by "/<EKS cluster name>
