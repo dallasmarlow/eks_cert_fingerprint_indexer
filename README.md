@@ -8,7 +8,7 @@ AWS EKS clusters [use](https://aws.amazon.com/blogs/containers/introducing-oidc-
 
 AWS provides the following documentation with instructions on how to obtain the certificate fingerprint manually: <https://docs.aws.amazon.com/IAM/latest/UserGuide/id_roles_providers_create_oidc_verify-thumbprint.html>.
 
-Typically when managing EKS clusters using [Terraform](https://www.terraform.io/) you can use the [TLS provider](https://registry.terraform.io/providers/hashicorp/tls/latest/docs) to fetch the certificate fingerprint associated with the OIDC issuer associated with a given EKS cluster directly. Example:
+Typically when managing EKS clusters using [Terraform](https://www.terraform.io/) you can use the [TLS provider](https://registry.terraform.io/providers/hashicorp/tls/latest/docs) to fetch the certificate fingerprint of the OIDC issuer associated with a given EKS cluster directly. Example:
 
 ```
 data "tls_certificate" "cluster_issuer" {
