@@ -69,7 +69,7 @@ The `eks_cert_fingerprint_indexer` program is written in [go](https://go.dev/) w
 
 ## Lambda environment_variables
   - `CERT_INDEX` - Reverse numeric index of the certificate to fingerprint within chain, defaults to last cert defined within chain.
-  - `SSM_KEY_PFX` - SSM parameter name prefix, values must start with `/`. Default: `/eks_cluster_oidc_fingerprints/`
+  - `SSM_KEY_PFX` - SSM parameter name prefix, values must start and end with `/`. Default: `/eks_cluster_oidc_fingerprints/`
   - `SSM_OVERWRITE` - Overwrite existing SSM parameters. Default: `false`
   - `VERIFY_CERTS` - Verify TLS certificates. Default: `true`
 
