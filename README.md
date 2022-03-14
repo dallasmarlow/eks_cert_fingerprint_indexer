@@ -57,4 +57,4 @@ The `eks_cert_fingerprint_indexer` program performs the following actions when e
   - Describe each EKS cluster to fetch the OIDC issuer URL associated.
   - Establish TLS connection to each OIDC issuer URL to read certificates.
   - Generate SHA1 "fingerprint" of the configured certificate index (default is last certificate defined) within the certificate chain.
-  - Create SSM parameter using the configured key prefix suffixed by "/<EKS cluster name>
+  - Create SSM parameter using the configured key prefix suffixed by `/<EKS cluster name>`.
