@@ -14,12 +14,7 @@ import (
 func handler() {
 	awsSession := session.Must(session.NewSession())
 	if err := indexer.Run(
-		indexer.Config{
-			CertificateIndex: indexer.DefaultCertificateIndex,
-			SSMKeyPrefix:     indexer.DefaultSSMKeyPrefix,
-			SSMOverwrite:     indexer.DefaultSSMOverwrite,
-			VerifyCertChain:  indexer.DefaultVerifyCertChain,
-		},
+		indexer.NewConfigFromEnv(),
 		eks.New(awsSession),
 		ssm.New(awsSession),
 	); err != nil {
